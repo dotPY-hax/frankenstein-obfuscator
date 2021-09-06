@@ -6,8 +6,8 @@ import build
 def run():
     banner()
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", help="exe file you want to obfuscate", required=True)
-    parser.add_argument("-o", help="file you want to write to", default="/tmp/totally_legitimate_powershell_file.ps1")
+    parser.add_argument("-e", metavar="EXE", help="exe file you want to obfuscate", required=True)
+    parser.add_argument("-o", metavar="OUTPUT", help="file you want to write to", default="/tmp/totally_legitimate_powershell_file.ps1")
     args = parser.parse_args()
 
     script = build.build_final_script(args.e)
