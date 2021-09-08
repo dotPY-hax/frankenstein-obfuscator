@@ -17,9 +17,10 @@ usage: frankenstein.py [-h] -e EXE [-o OUTPUT]
 optional arguments:
   -h, --help  show this help message and exit
   -e EXE      exe file you want to obfuscate
+  -p POWERSHELL  powershell file you want to obfuscate
   -o OUTPUT   file you want to write to
   ```
   # HOWTO:
-  - `python frankenstein.py -e /tmp/juicypotato.exe`
+  - `python frankenstein.py -e /tmp/juicypotato.exe` OR `python frankenstein.py -p /tmp/absolutely_not_covenant_i_promisse.ps1`
   - upload `/tmp/totally_legitimate_powershell_file.ps1` to your target
   - on target: `powershell ./totally_legitimate_powershell_file.ps1 -arguments 'arguments for the exe here'`
