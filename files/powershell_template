@@ -1,0 +1,6 @@
+param($arguments="")
+
+$InputString = '{}'
+
+$string = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($InputString))
+Invoke-Expression -Command $string
