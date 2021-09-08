@@ -41,6 +41,8 @@ def template_file():
 def script_file():
     return read_file(files.reflect_file)
 
+def powershell_template_file():
+    return read_file(files.powershell_template_file)
 
 def write_final_file(output_file_content, output_file_name):
     print("writing file to " + output_file_name)
@@ -64,3 +66,15 @@ def build_final_script(exe_file):
     script = template.format(payload, invoke_script)
     script = obfuscate(script)
     return script
+
+def pure_powershell_obfuscation(powershell_file):
+    template = powershell_template_file()
+    powershell = read_file(powershell_file)
+    powershell = obfuscate(powershell)
+    based_powershell = base64.b64encode(powershell.encode()).decode()
+    print("chopping up powershell " + powershell_file)
+    powershell = chop_string(based_powershell)
+    powershell = template.format(powershell)
+    powershell = obfuscate(powershell)
+    return powershell
+
