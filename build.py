@@ -1,6 +1,7 @@
 import base64
 import random
 
+import comment_remover
 import PyFuscation
 import files
 
@@ -56,6 +57,9 @@ def obfuscate(script):
     return obfuscator.script
 
 
+
+
+
 def build_final_script(exe_file):
     template = template_file()
     payload = base64_exe(exe_file)
@@ -70,6 +74,7 @@ def build_final_script(exe_file):
 def pure_powershell_obfuscation(powershell_file):
     template = powershell_template_file()
     powershell = read_file(powershell_file)
+    powershell = comment_remover.remove_comments(powershell)
     powershell = obfuscate(powershell)
     based_powershell = base64.b64encode(powershell.encode()).decode()
     print("chopping up powershell " + powershell_file)
