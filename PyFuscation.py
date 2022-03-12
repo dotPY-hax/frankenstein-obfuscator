@@ -21,7 +21,7 @@ import files
 
 class Obfuscator:
     def __init__(self, script_in):
-        self.verbose = False
+        self.verbose = True
 
         self.original_script = script_in
         self.script = script_in
@@ -30,10 +30,20 @@ class Obfuscator:
 
     def replacer(self, replace_dictionary):
         for replace, replacer in replace_dictionary.items():
+            base_name = replace
+            base_name_replacer = replacer
+            if replacer.startswith("$"):
+                base_name_replacer = base_name_replacer[1:]
             if replace.startswith("$"):
+                base_name = base_name[1:]
                 replace = replace.replace("$", "\$")
 
             self.script = re.sub(r"{}\b".format(replace), replacer, self.script)
+            self.script = re.sub(r"@{}\b".format(base_name), "@" + base_name_replacer, self.script)
+            self.script = re.sub(r"\$PSBoundParameters\['{}'\]".format(base_name), "$PSBoundParameters['{}']".format(base_name_replacer), self.script)
+            self.script = re.sub(r"\$Arguments\['{}'\]".format(base_name), "$Arguments['{}']".format(base_name_replacer), self.script)
+
+
 
     def find_custom_parameters(self, variables):
         parameters = {}
