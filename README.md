@@ -11,6 +11,8 @@ a very heavily refactored version of  [PyFuscate](https://github.com/CBHue/PyFus
 This could become arbitrarily sophisticated by adding more layers of obfuscation and/or encryption but for now I try to keep it simple and stupid
 
 
+This might break when there are # signs inside strings because the obfuscator thinks its an inline comment.
+If that happens replace line 35 in comment_remover.py <code> line = cut_inline_comment(line) </code> with <code>pass</code>
 ```
 usage: frankenstein.py [-h] -e EXE [-o OUTPUT]
 
