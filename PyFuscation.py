@@ -21,13 +21,14 @@ import files
 
 class Obfuscator:
     def __init__(self, script_in):
-        self.verbose = True
+        self.verbose = False
         self.keep_argument_names_intact = False
 
         self.original_script = script_in
         self.script = script_in
         self.wordlist = None
-        self.function_dictionary = {}
+        self.functions = {}
+        self.parameters = {}
         self.lower_reserved = self.get_reserved()
 
     def replacer(self, replace_dictionary):
@@ -40,11 +41,19 @@ class Obfuscator:
                 base_name = base_name[1:]
                 replace = replace.replace("$", "\$")
 
+            if self.keep_argument_names_intact and self.might_be_parameter(replace):
+                continue
+
             self.script = re.sub(r"{}\b".format(replace), replacer, self.script)
             self.script = re.sub(r"@{}\b".format(base_name), "@" + base_name_replacer, self.script)
             self.script = re.sub(r"\$PSBoundParameters\['{}'\]".format(base_name), "$PSBoundParameters['{}']".format(base_name_replacer), self.script)
             self.script = re.sub(r"\$Arguments\['{}'\]".format(base_name), "$Arguments['{}']".format(base_name_replacer), self.script)
 
+
+    def might_be_parameter(self, replace):
+        replace = replace.replace("\$", "")
+        replace = " -" + replace
+        return replace in self.parameters.keys()
 
 
     def find_custom_parameters(self, variables):
@@ -190,14 +199,11 @@ class Obfuscator:
         print("Obfuscating")
 
         variables = self.find_variables()
+        self.parameters = self.find_custom_parameters(variables)
+        self.functions = self.find_functions()
+
         self.replacer(variables)
-
-        if not self.keep_argument_names_intact:
-            parameters = self.find_custom_parameters(variables)
-            self.replacer(parameters)
-
-        functions = self.find_functions()
-        self.function_dictionary = functions
-        self.replacer(functions)
+        self.replacer(self.parameters)
+        self.replacer(self.functions)
 
         return self.script

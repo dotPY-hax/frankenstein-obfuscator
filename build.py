@@ -58,7 +58,7 @@ def obfuscate(script, use_as_module):
     obfuscator.main()
 
     if use_as_module:
-        function_dictionary = obfuscator.function_dictionary
+        function_dictionary = obfuscator.functions
         function_aliases = aliases.add_all_aliases(function_dictionary)
         script = obfuscator.script + "\n".join(function_aliases)
     else:
