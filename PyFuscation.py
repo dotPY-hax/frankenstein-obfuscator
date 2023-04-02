@@ -22,10 +22,12 @@ import files
 class Obfuscator:
     def __init__(self, script_in):
         self.verbose = True
+        self.keep_argument_names_intact = False
 
         self.original_script = script_in
         self.script = script_in
         self.wordlist = None
+        self.function_dictionary = {}
         self.lower_reserved = self.get_reserved()
 
     def replacer(self, replace_dictionary):
@@ -190,10 +192,12 @@ class Obfuscator:
         variables = self.find_variables()
         self.replacer(variables)
 
-        parameters = self.find_custom_parameters(variables)
-        self.replacer(parameters)
+        if not self.keep_argument_names_intact:
+            parameters = self.find_custom_parameters(variables)
+            self.replacer(parameters)
 
         functions = self.find_functions()
+        self.function_dictionary = functions
         self.replacer(functions)
 
         return self.script
